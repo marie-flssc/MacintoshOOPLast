@@ -1,31 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\flois\\source\\repos\\OOP\\Final\\OOP_CA_Macintosh\\OOP_CA_Macintosh.csproj": {}
+    "/Users/zoeharris/School/S4/OOP/fuck_this_fucking_project/MacintoshOOPLast/OOP_CA_Macintosh.csproj": {}
   },
   "projects": {
-    "C:\\Users\\flois\\source\\repos\\OOP\\Final\\OOP_CA_Macintosh\\OOP_CA_Macintosh.csproj": {
+    "/Users/zoeharris/School/S4/OOP/fuck_this_fucking_project/MacintoshOOPLast/OOP_CA_Macintosh.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\flois\\source\\repos\\OOP\\Final\\OOP_CA_Macintosh\\OOP_CA_Macintosh.csproj",
+        "projectUniqueName": "/Users/zoeharris/School/S4/OOP/fuck_this_fucking_project/MacintoshOOPLast/OOP_CA_Macintosh.csproj",
         "projectName": "OOP_CA_Macintosh",
-        "projectPath": "C:\\Users\\flois\\source\\repos\\OOP\\Final\\OOP_CA_Macintosh\\OOP_CA_Macintosh.csproj",
-        "packagesPath": "C:\\Users\\flois\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\flois\\source\\repos\\OOP\\Final\\OOP_CA_Macintosh\\obj\\",
+        "projectPath": "/Users/zoeharris/School/S4/OOP/fuck_this_fucking_project/MacintoshOOPLast/OOP_CA_Macintosh.csproj",
+        "packagesPath": "/Users/zoeharris/.nuget/packages/",
+        "outputPath": "/Users/zoeharris/School/S4/OOP/fuck_this_fucking_project/MacintoshOOPLast/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
-        ],
         "configFilePaths": [
-          "C:\\Users\\flois\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "/Users/zoeharris/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -44,6 +38,18 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[10.1.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            },
+            "EntityFramework": {
+              "target": "Package",
+              "version": "[6.4.4, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[5.0.5, )"
@@ -59,6 +65,10 @@
             "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
               "version": "[5.0.3, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.5, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
@@ -84,7 +94,7 @@
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
-              "version": "[6.10.2, )"
+              "version": "[6.10.0, )"
             }
           },
           "imports": [
@@ -105,7 +115,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.201/RuntimeIdentifierGraph.json"
         }
       }
     }

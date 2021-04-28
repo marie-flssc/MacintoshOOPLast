@@ -1,0 +1,35 @@
+﻿<Properties StartupConfiguration="{D6ED1A96-30FD-45AE-A5E6-034B17ECC17A}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Services/AccountServices.cs">
+    <Files>
+      <File FileName="Controllers/UserController.cs" Line="45" Column="90" />
+      <File FileName="Data/Context.cs" />
+      <File FileName="Controllers/GradesController.cs" />
+      <File FileName="Controllers/HomeController.cs" />
+      <File FileName="Controllers/FeesController.cs" />
+      <File FileName="Controllers/AttendanceController.cs" />
+      <File FileName="Services/AccountServices.cs" Line="8" Column="21" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="OOP_CA_Macintosh" expanded="True">
+            <Node name="OOP_CA_Macintosh" expanded="True">
+              <Node name="Controllers" expanded="True" />
+              <Node name="Data" expanded="True" />
+              <Node name="Services" expanded="True">
+                <Node name="AccountServices.cs" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.OOP__CA__Macintosh PreferredExecutionTarget="/Applications/Safari.app" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
