@@ -37,11 +37,12 @@ namespace OOP_CA_Macintosh
                 opt.UseMySQL(Configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-                options =>
+            .AddCookie(options =>
                 {
-                    options.LoginPath = new PathString("/User/Login");
-                    options.AccessDeniedPath = new PathString("/User/Denied");
+                    options.LoginPath = "/Login";
+
+                    //options.AccessDeniedPath ="/User/Denied";
+                    //Iadd
                 });
             services.AddRazorPages();
             services.AddControllers();
@@ -64,9 +65,9 @@ namespace OOP_CA_Macintosh
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {

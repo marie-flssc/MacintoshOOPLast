@@ -16,29 +16,21 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using OOP_CA_Macintosh.Helpers;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace OOP_CA_Macintosh.Controllers
 {
-    [Authorize]
-    [ApiController]
-    [Route("[controller]")]
-
     public class UserController : Controller
     {
-        private IUserServices _userServices;
-        private IMapper _mapper;
-        public IConfiguration Configuration;
+        private readonly Context _context;
         public UserController(
-            IUserServices userServices,
-            IMapper mapper,
-            IConfiguration configuration)
+            Context context)
         {
-            _userServices = userServices;
-            _mapper = mapper;
-            Configuration = configuration;
+            _context = context;
         }
 
-        [AllowAnonymous]
+        /*[AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] AuthenticateModel model)
         {
@@ -143,6 +135,42 @@ namespace OOP_CA_Macintosh.Controllers
         {
             _userServices.Delete(id);
             return Ok();
+        }*/
+
+        [HttpGet("Login")]
+        public IActionResult Login(string returnUrl)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Validate(string username, string password, string returnUrl)
+        {
+            /*var user = await _context.User
+                .FirstOrDefaultAsync(m => m.Username == username);
+            if(user!=null && user.password == password)
+            {
+                return Ok();
+            }*/
+            if (username == "bob" && password == "lol")
+            {
+                var claims = new List<Claim>();
+                claims.Add(new Claim("username", username));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+                await HttpContext.SignInAsync(claimsPrincipal);
+                return Redirect(returnUrl);
+            }
+            return BadRequest();
+        }
+
+        [Authorize]
+        public IActionResult Secured()
+        {
+            return View();
+        }
+
     }
 }
