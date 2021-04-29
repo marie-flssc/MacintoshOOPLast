@@ -29,9 +29,6 @@ namespace OOP_CA_Macintosh.Controllers
         }
 
 
-
-
-
         [Authorize(Roles = AccessLevel.Faculty)]
         public IActionResult SeeStudentTimetable(int? id)
         {
