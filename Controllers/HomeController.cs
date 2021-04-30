@@ -7,7 +7,7 @@ using OOP_CA_Macintosh.Data;
 using OOP_CA_Macintosh.Models;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
+
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;

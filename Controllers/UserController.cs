@@ -9,7 +9,7 @@ using OOP_CA_Macintosh.Data;
 using OOP_CA_Macintosh.Services;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using AutoMapper;
+
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
@@ -144,7 +144,7 @@ namespace OOP_CA_Macintosh.Controllers
             return View();
         }
 
-        [HttpPost("login")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Validate(string username, string password, string returnUrl)
         {
             /*var user = await _context.User

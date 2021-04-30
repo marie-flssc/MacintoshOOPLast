@@ -44,6 +44,7 @@ namespace OOP_CA_Macintosh
                     //options.AccessDeniedPath ="/User/Denied";
                     //Iadd
                 });
+
             services.AddRazorPages();
             services.AddControllers();
         }
