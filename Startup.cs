@@ -31,7 +31,7 @@ namespace OOP_CA_Macintosh
             .AddCookie(options =>
                 {
                     options.LoginPath = "/Login";
-                    options.AccessDeniedPath = "/Login";
+                    options.AccessDeniedPath = "/Home";
                     /*options.Events = new CookieAuthenticationEvents()
                     {
                         OnSigningIn = async Context =>

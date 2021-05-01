@@ -46,11 +46,13 @@ namespace OOP_CA_Macintosh.Controllers
             return View(time);
         }
 
-
-        [Authorize(Roles = AccessLevel.Student)]
+        
+        [Authorize]
         public IActionResult SeeOwnTimetable()
         {
-            int id = int.Parse(User.Identity.Name);
+            String userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _context.User.ToList().Find(x => x.Username.Equals(userId));
+            int id = user.Id;
             var time = GetCourses(id);
             if (time == null)
             {
@@ -78,6 +80,13 @@ namespace OOP_CA_Macintosh.Controllers
                 }
             }
             return res;
+        }
+
+        public JsonResult GetEvents()
+        {
+            var user = _context.User.FirstOrDefault(x => x.Username == User.Identity.Name);
+            var events = _context.Timetable.Where(x => x.StudentId == user.Id);
+            return new JsonResult(new { Data = events });
         }
     }
 }
