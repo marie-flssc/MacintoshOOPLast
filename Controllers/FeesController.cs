@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OOP_CA_Macintosh.Data;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace OOP_CA_Macintosh.Controllers
 {
+    [Authorize]
     public class FeesController : Controller
     {
         private readonly Context _context;
@@ -40,6 +42,40 @@ namespace OOP_CA_Macintosh.Controllers
             }
 
             return View(payment);
+        }
+
+        public async Task<IActionResult> Pay(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var model = await _context.Fees
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            if (model.AmountToPay > 0)
+            {
+                return View(model);
+                
+            }
+            TempData["Done"] = "You have already payed everything";
+            return RedirectToAction("Index", "Fees");
+        }
+
+        private int getUserId()
+        {
+            try
+            {
+                return int.Parse(User.Identity.Name);
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
         }
     }
 }

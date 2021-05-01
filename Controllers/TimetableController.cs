@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace OOP_CA_Macintosh.Controllers
 {
+    [Authorize]
     public class TimetableController : Controller
     {
         private readonly Context _context;

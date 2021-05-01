@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OOP_CA_Macintosh.Data;
 using OOP_CA_Macintosh.Models;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace OOP_CA_Macintosh.Controllers
 {
+    [Authorize]
     public class CoursesController : Controller
     {
         private readonly Context _context;

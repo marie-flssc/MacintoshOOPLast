@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OOP_CA_Macintosh.Data;
+using OOP_CA_Macintosh.DTO;
+using OOP_CA_Macintosh.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace OOP_CA_Macintosh.Controllers
 {
+
     public class GradesController : Controller
     {
         private readonly Context _context;
@@ -19,25 +24,122 @@ namespace OOP_CA_Macintosh.Controllers
         {
             return View();
         }
-
         public IActionResult Add()
         {
             return View();
         }
 
-        public IActionResult Details()
+        [Authorize(Roles = AccessLevel.Faculty)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add([Bind("StudentId,subject,Result")] Grade model)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
         }
 
-        public IActionResult Edit()
+        public async Task<IActionResult> Details(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var grade = await _context.Grades
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (grade == null)
+            {
+                return NotFound();
+            }
+
+            return View(grade);
         }
 
-        public IActionResult Remove()
+        [Authorize(Roles = AccessLevel.Faculty)]
+        public async Task<IActionResult> Edit(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var model = await _context.Grades.FindAsync(id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = AccessLevel.Faculty)]
+        public async Task<IActionResult> Edit(int id, [Bind("StudentId,subject,Result")] Grade model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(model);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!GradeExists(model.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        [Authorize(Roles = AccessLevel.Faculty)]
+        public async Task<IActionResult> Remove(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var model = await _context.Grades
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost, ActionName("Remove")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = AccessLevel.Faculty)]
+        public async Task<IActionResult> RemoveConfirmed(int id)
+        {
+            var movie = await _context.Grades.FindAsync(id);
+            _context.Grades.Remove(movie);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool GradeExists(int id)
+        {
+            return _context.Grades.Any(e => e.Id == id);
         }
     }
 }
