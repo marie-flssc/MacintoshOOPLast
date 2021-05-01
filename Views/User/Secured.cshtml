@@ -4,4 +4,10 @@
 @{
 }
 
-HEYYYY
+Welcome @User.Identity.Name
+<ul>
+    @foreach(var c in User.Claims)
+    {
+        <li>@c.Type: @c.Value</li>
+    }
+</ul>

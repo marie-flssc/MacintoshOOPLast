@@ -15,10 +15,11 @@ namespace OOP_CA_Macintosh.Data
         }
 
         public DbSet<User> User { get; set; }
-        public DbSet<Courses> Timetable { get; set; }
+        public DbSet<Courses> Courses { get; set; }
         public DbSet<Grade> Grades { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Fee> Fees { get; set; }
+        public DbSet<StudentToClass> Timetable { get; set; }
 
 
     }

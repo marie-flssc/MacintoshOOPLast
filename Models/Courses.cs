@@ -19,7 +19,6 @@ namespace OOP_CA_Macintosh.Models
 
         public int Id { get; set; }
         public DateTime Time { get; set; }
-        public List<int> StudentsId { get; set; }
         public Subj Subject { get; set; }
         public int Length { get; set; }
         public bool IsExam { get; set; }

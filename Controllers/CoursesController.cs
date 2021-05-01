@@ -53,9 +53,9 @@ namespace OOP_CA_Macintosh.Controllers
             return View();
         }
 
-        public IActionResult AddAction([Bind("Time,Subject,Length,IsExam,StudentsId")] Courses course)
+        public IActionResult AddAction([Bind("Time,Subject,Length,IsExam")] Courses course)
         {
-            _context.Timetable.Add(course);
+            _context.Courses.Add(course);
             _context.SaveChanges();
             return RedirectToAction("Index", "Courses");
         }

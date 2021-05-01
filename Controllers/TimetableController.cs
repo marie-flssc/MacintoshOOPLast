@@ -68,11 +68,12 @@ namespace OOP_CA_Macintosh.Controllers
             var time = _context.Timetable;
             if(id != null)
             {
-                foreach (Courses classe in time)
+                foreach (StudentToClass classe in time)
                 {
-                    if (classe.StudentsId.Contains(id.Value))
+                    if (classe.StudentId == id.Value)
                     {
-                        res.Add(classe);
+                        var tt = _context.Courses.ToList().Find(x => x.Id == classe.Course);
+                        res.Add(tt);
                     }
                 }
             }

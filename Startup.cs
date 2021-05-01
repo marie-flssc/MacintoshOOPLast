@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using OOP_CA_Macintosh.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace OOP_CA_Macintosh
 {
@@ -30,9 +31,23 @@ namespace OOP_CA_Macintosh
             .AddCookie(options =>
                 {
                     options.LoginPath = "/Login";
-
-                    //options.AccessDeniedPath ="/User/Denied";
-                    //Iadd
+                    options.AccessDeniedPath = "/Login";
+                    /*options.Events = new CookieAuthenticationEvents()
+                    {
+                        OnSigningIn = async Context =>
+                        {
+                            await Task.CompletedTask;
+                        },
+                        OnSignedIn = async Context =>
+                        {
+                            await Task.CompletedTask;
+                        },
+                        OnValidatePrincipal = async Context =>
+                        {
+                            await Task.CompletedTask;
+                        }
+                    };*/
+                   
                 });
 
             services.AddRazorPages();
