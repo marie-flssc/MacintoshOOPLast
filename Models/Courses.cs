@@ -18,6 +18,7 @@ namespace OOP_CA_Macintosh.Models
         }
 
         public int Id { get; set; }
+        public string CourseId { get; set; }
         public DateTime Time { get; set; }
         public Subj Subject { get; set; }
         public int Length { get; set; }
