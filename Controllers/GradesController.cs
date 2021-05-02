@@ -108,6 +108,7 @@ namespace OOP_CA_Macintosh.Controllers
             return View(model);
         }
 
+
         [Authorize(Roles = AccessLevel.Faculty)]
         public async Task<IActionResult> Remove(int? id)
         {
@@ -131,8 +132,8 @@ namespace OOP_CA_Macintosh.Controllers
         [Authorize(Roles = AccessLevel.Faculty)]
         public async Task<IActionResult> RemoveConfirmed(int id)
         {
-            var movie = await _context.Grades.FindAsync(id);
-            _context.Grades.Remove(movie);
+            var model = await _context.Grades.FindAsync(id);
+            _context.Grades.Remove(model);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
