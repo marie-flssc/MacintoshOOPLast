@@ -1,5 +1,151 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<StudentToClass>
+
 @{
+    ViewData["Title"] = "Index";
 }
+
+<h1>Time Table</h1>
+
+@section Head{
+    <link type="text/css" rel="stylesheet" href="themes/calendar_g.css" />
+    <link type="text/css" rel="stylesheet" href="themes/calendar_green.css" />
+    <link type="text/css" rel="stylesheet" href="themes/calendar_traditional.css" />
+    <link type="text/css" rel="stylesheet" href="themes/calendar_transparent.css" />
+    <link type="text/css" rel="stylesheet" href="themes/calendar_white.css" />
+}
+
+<div style="display: flex">
+
+    <div style="margin-right: 10px;">
+        <div id="nav"></div>
+    </div>
+
+    <div style="flex-grow: 1;">
+
+        <div class="space">
+            Theme: <select id="theme">
+                <option value="calendar_default">Default</option>
+                <option value="calendar_white">White</option>
+                <option value="calendar_g">Google-Like</option>
+                <option value="calendar_green">Green</option>
+                <option value="calendar_traditional">Traditional</option>
+                <option value="calendar_transparent">Transparent</option>
+            </select>
+        </div>
+
+        <div id="dp"></div>
+    </div>
+
+</div>
+
+<script src="~/lib/daypilot/daypilot-all.min.js" asp-append-version="true"></script>
+<script>
+    var nav = new DayPilot.Navigator("nav");
+    nav.showMonths = 3;
+    nav.skipMonths = 3;
+    nav.selectMode = "week";
+    nav.onTimeRangeSelected = function (args) {
+        dp.startDate = args.day;
+        dp.update();
+        loadEvents();
+    };
+    nav.init();
+
+    var dp = new DayPilot.Calendar("dp");
+    dp.viewType = "Week";
+
+    dp.eventDeleteHandling = "Update";
+
+    dp.onEventDeleted = function (args) {
+        DayPilot.Http.ajax({
+            url: "/api/CalendarEvents/" + args.e.id(),
+            method: "DELETE",
+            success: function () {
+                console.log("Deleted.");
+            }
+        });
+    };
+
+    dp.onEventMoved = function (args) {
+        DayPilot.Http.ajax({
+            url: "/api/CalendarEvents/" + args.e.id(),
+            method: "PUT",
+            data: {
+                id: args.e.id(),
+                start: args.newStart,
+                end: args.newEnd,
+                text: args.e.text()
+            },
+            success: function () {
+                console.log("Resized.");
+            }
+        });
+    };
+
+    dp.onEventResized = function (args) {
+        DayPilot.Http.ajax({
+            url: "/api/CalendarEvents/" + args.e.id(),
+            method: "PUT",
+            data: {
+                id: args.e.id(),
+                start: args.newStart,
+                end: args.newEnd,
+                text: args.e.text()
+            },
+            success: function () {
+                console.log("Resized.");
+            }
+        });
+    };
+
+    // event creating
+    dp.onTimeRangeSelected = function (args) {
+        var name = prompt("New event name:", "Event")
+        dp.clearSelection();
+        if (!name) {
+            return;
+        }
+
+        DayPilot.Http.ajax({
+            url: "/api/CalendarEvents",
+            method: "POST",
+            data: {
+                start: args.start,
+                end: args.end,
+                text: name
+            },
+            success: function (ajax) {
+                var data = ajax.data;
+                dp.events.add(new DayPilot.Event({
+                    start: args.start,
+                    end: args.end,
+                    id: data.id,
+                    text: name
+                }));
+                console.log("Created.");
+            }
+        });
+    };
+
+    dp.onEventClick = function (args) {
+        alert("clicked: " + args.e.id());
+    };
+
+    dp.init();
+
+    loadEvents();
+
+    function loadEvents() {
+        dp.events.load("/api/CalendarEvents");
+    }
+
+    var elements = {
+        theme: document.querySelector("#theme")
+    };
+
+    elements.theme.addEventListener("change", function () {
+        dp.theme = this.value;
+        dp.update();
+    });
+
+</script>

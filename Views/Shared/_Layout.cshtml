@@ -36,7 +36,7 @@
                         @if(User.IsInRole("Student"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="SeeOwnTimetable">My timetable</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">My timetable</a>
                             </li>
                         }
                         @if(User.IsInRole("Admin"))
@@ -88,5 +88,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Head", required: false)
 </body>
 </html>
