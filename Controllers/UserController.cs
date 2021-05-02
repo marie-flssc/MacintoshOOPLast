@@ -47,6 +47,7 @@ namespace OOP_CA_Macintosh.Controllers
                 claims.Add(new Claim("username", username));
                 claims.Add(new Claim(ClaimTypes.NameIdentifier, username));
                 claims.Add(new Claim(ClaimTypes.Name, username));
+                claims.Add(new Claim(ClaimTypes.Role, user.Role));
                 //TODO ADD HERE ALL THINGS IN DATABASE 37:00 ENVIRON
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
