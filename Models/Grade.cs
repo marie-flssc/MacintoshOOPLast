@@ -20,6 +20,7 @@ namespace OOP_CA_Macintosh.Models
         public int Id { get; set; }
         public int StudentId { get; set; }
         public int Result { get; set; }
+        public int coef { get; set; }
         public Subj subject { get; set; }
     }
 }

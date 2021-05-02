@@ -1,5 +1,52 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model List<OOP_CA_Macintosh.Models.Courses>
+<body>
+    <header>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-controller="Courses"
+               asp-action="Create">Create</a>
+        </li>
+    </header>
+
+    <table class="table" , style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].CourseId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Subject)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model[0].Length)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Length)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
