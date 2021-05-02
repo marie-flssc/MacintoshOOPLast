@@ -13,7 +13,7 @@ namespace OOP_CA_Macintosh.Models
         [Required]
         public string Password { get; set; }
         [Required]
-        public string AccessLevel { get; set; }
+        public string Role { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]

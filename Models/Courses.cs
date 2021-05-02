@@ -22,6 +22,7 @@ namespace OOP_CA_Macintosh.Models
         public Subj Subject { get; set; }
         public int Length { get; set; }
         public bool IsExam { get; set; }
+        public int FacultyId { get; set; }
         
     }
 }

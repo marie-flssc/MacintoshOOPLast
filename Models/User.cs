@@ -22,6 +22,5 @@ namespace OOP_CA_Macintosh.Models
         [RegularExpression(@"/^(?=.*[A-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@])(?!.*[iIoO])\S{6,12}$/")]
         public string Password { get; set; }
         public string Role { get; set; }
-        public string AccessLevel { get; set; }
     }
 }

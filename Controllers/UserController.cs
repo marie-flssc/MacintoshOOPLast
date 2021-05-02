@@ -78,7 +78,6 @@ namespace OOP_CA_Macintosh.Controllers
             if (ModelState.IsValid)
             {
                 var user = _context.User.ToList().Find(x => x.Id.Equals(id));
-                //Check if the mark id exist
                 if (user == null)
                 {
                     return BadRequest(new { message = "This user does not exist." });
@@ -101,16 +100,81 @@ namespace OOP_CA_Macintosh.Controllers
             }
             return View(model);
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("Firstname,LastName,Email,Username,Password,Role")] User model, string returnUrl)
+        {
+            if (_context.User.ToList().FindAll(x => x.Username.Equals(model.Username)).Count > 0)
+            {
+                TempData["Error"] = "Username is already taken";
+                return Redirect(returnUrl);
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return RedirectToAction("Login", "User");
+        }
+
+
+        [HttpGet]
+        [ValidateAntiForgeryToken]
+        public IActionResult GetAllStudents()
+        {
+            var res = new List<User>();
+            int id = getUserId();
+            List<User> student = _context.User.ToList().FindAll(x => x.Role.Equals("Student"));
+            List<Courses> classe = _context.Courses.ToList().FindAll(x => x.FacultyId.Equals(id));
+            var courseId = new List<int>();
+            foreach(Courses chr in classe) 
+            {
+                courseId.Add(chr.Id);
+            }
+            var studenttoclass = _context.Timetable;
+            foreach(StudentToClass st in studenttoclass)
+            {
+                if(courseId.Contains(st.Course))
+                {
+                    res.Add(student.Find(x => x.Id.Equals(st.StudentId)));
+                }
+            }
+            return View(res);
+        }
+
+        [HttpGet]
+        [ValidateAntiForgeryToken]
+        public IActionResult GetAllTeachers()
+        {
+            return View(_context.User.ToList().FindAll(x => x.Role.Equals("Faculty")));
+        }
+
+        [HttpGet]
+        [ValidateAntiForgeryToken]
+        public IActionResult GetUsers()
+        {
+            return View(_context.User);
+        }
+
+
         private int getUserId()
         {
             try
             {
-                return int.Parse(User.Identity.Name);
+                String userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _context.User.ToList().Find(x => x.Username.Equals(userId));
+                return user.Id;
             }
             catch (Exception)
             {
                 return -1;
             }
         }
+
+
     }
 }

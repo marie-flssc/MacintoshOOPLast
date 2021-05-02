@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OOP_CA_Macintosh.Data;
+using OOP_CA_Macintosh.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +66,7 @@ namespace OOP_CA_Macintosh.Controllers
             TempData["Done"] = "You have already payed everything";
             return RedirectToAction("Index", "Fees");
         }
+
 
         private int getUserId()
         {
