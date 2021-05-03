@@ -22,14 +22,13 @@ namespace OOP_CA_Macintosh.Controllers
         {
             _context = context;
         }
+
         [Authorize]
-        // GET: TimeTables
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Timetable.ToListAsync());
+            return View( _context.Courses);
         }
 
-        // GET: TimeTables/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,7 +36,7 @@ namespace OOP_CA_Macintosh.Controllers
                 return NotFound();
             }
 
-            var timeTable = await _context.Timetable
+            var timeTable = await _context.Courses
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (timeTable == null)
             {
@@ -47,18 +46,14 @@ namespace OOP_CA_Macintosh.Controllers
             return View(timeTable);
         }
 
-        // GET: TimeTables/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: TimeTables/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Start,End,Text,Color")] StudentToClass timeTable)
+        public async Task<IActionResult> Create([Bind("Id,Start,End,Name,Color")] StudentToClass timeTable)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +64,6 @@ namespace OOP_CA_Macintosh.Controllers
             return View(timeTable);
         }
 
-        // GET: TimeTables/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,22 +71,20 @@ namespace OOP_CA_Macintosh.Controllers
                 return NotFound();
             }
 
-            var timeTable = await _context.Timetable.FindAsync(id);
-            if (timeTable == null)
+            var courses = await _context.Courses.FindAsync(id);
+            if (courses == null)
             {
                 return NotFound();
             }
-            return View(timeTable);
+            return View(courses);
         }
 
-        // POST: TimeTables/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Start,End,Text,Color")] StudentToClass timeTable)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Start,End,Name,Color")] Courses course)
         {
-            if (id != timeTable.Id)
+            if (id != course.Id)
             {
                 return NotFound();
             }
@@ -101,12 +93,12 @@ namespace OOP_CA_Macintosh.Controllers
             {
                 try
                 {
-                    _context.Update(timeTable);
+                    _context.Update(course);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TimeTableExists(timeTable.Id))
+                    if (!TimeTableExists(course.Id))
                     {
                         return NotFound();
                     }
@@ -117,10 +109,10 @@ namespace OOP_CA_Macintosh.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(timeTable);
+            return View(course);
         }
 
-        // GET: TimeTables/Delete/5
+        //TODO DELETE STUDENTTOCLASSASWELL
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -128,7 +120,7 @@ namespace OOP_CA_Macintosh.Controllers
                 return NotFound();
             }
 
-            var timeTable = await _context.Timetable
+            var timeTable = await _context.Courses
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (timeTable == null)
             {
@@ -138,20 +130,19 @@ namespace OOP_CA_Macintosh.Controllers
             return View(timeTable);
         }
 
-        // POST: TimeTables/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var timeTable = await _context.Timetable.FindAsync(id);
-            _context.Timetable.Remove(timeTable);
+            var courses = await _context.Courses.FindAsync(id);
+            _context.Courses.Remove(courses);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TimeTableExists(int id)
         {
-            return _context.Timetable.Any(e => e.Id == id);
+            return _context.Courses.Any(e => e.Id == id);
         }
     }
 }

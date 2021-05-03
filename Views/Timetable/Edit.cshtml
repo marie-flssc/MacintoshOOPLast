@@ -1,4 +1,4 @@
-﻿@model StudentToClass
+﻿@model Courses
 
 @{
     ViewData["Title"] = "Edit";
@@ -24,9 +24,9 @@
                 <span asp-validation-for="End" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
-                <input asp-for="Text" class="form-control" />
-                <span asp-validation-for="Text" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Color" class="control-label"></label>
