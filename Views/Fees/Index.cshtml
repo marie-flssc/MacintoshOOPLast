@@ -3,5 +3,11 @@
     //TODO If admin or faculty, does not show the page or just "you have no fees to pay"
 
 *@
-@{
+@if(User.IsInRole("Admin")|| User.IsInRole("Faculty"))
+{
+    <h1>This Section is restricted to Student for tuiton fees</h1>
+}
+else 
+{
+    <h1>You have no fees to pay </h1>
 }
