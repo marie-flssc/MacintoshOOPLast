@@ -71,6 +71,14 @@ namespace OOP_CA_Macintosh.Controllers
             return View();
         }
 
+        [HttpGet("Create")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AccessLevel.Admin)]
@@ -103,21 +111,29 @@ namespace OOP_CA_Macintosh.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Firstname,LastName,Email,Username,Password,Role")] User model, string returnUrl)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,Username,Password,Role")] RegisterModel model)
         {
-            if (_context.User.ToList().FindAll(x => x.Username.Equals(model.Username)).Count > 0)
+            User modelUser = new User();
+            modelUser.FirstName = model.FirstName;
+            modelUser.LastName = model.LastName;
+            modelUser.Email = model.Email;
+            modelUser.Password = model.Password;
+            modelUser.Username = model.Username;
+            modelUser.Role = model.Role;
+
+            if (_context.User.ToList().FindAll(x => x.Username.Equals(modelUser.Username)).Count > 0)
             {
                 TempData["Error"] = "Username is already taken";
-                return Redirect(returnUrl);
+                return Redirect(nameof(Create));
             }
 
             if (ModelState.IsValid)
             {
-                _context.Add(model);
+                _context.Add(modelUser);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Login));
             }
             return RedirectToAction("Login", "User");
         }
