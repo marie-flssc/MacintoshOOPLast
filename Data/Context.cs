@@ -20,12 +20,8 @@ namespace OOP_CA_Macintosh.Data
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Fee> Fees { get; set; }
         public DbSet<StudentToClass> Timetable { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Grade>().Property(x => x.subject).HasConversion(v => v.ToString(), v => (Subj)Enum.Parse(typeof(Subj), v));
-        }
-
+        public DbSet<Events> Events { get; set; }
+        public DbSet<CalendarEvent> CalendarEvent { get; set; }
 
     }
 }

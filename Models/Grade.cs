@@ -11,7 +11,7 @@ namespace OOP_CA_Macintosh.Models
         public int StudentId { get; set; }
         public int Result { get; set; }
         public int coef { get; set; }
-        public Subj subject { get; set; }
+        public String subject { get; set; }
     }
 }
 

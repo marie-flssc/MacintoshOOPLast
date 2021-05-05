@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Courses>
+﻿@model List<OOP_CA_Macintosh.Models.Events>
 
 @{
     ViewData["Title"] = "Index";
@@ -21,13 +21,6 @@
     </div>
 
     <div style="flex-grow: 1;">
-
-        <div class="space">
-            <style id="theme">
-                <option value="calendar_default">Default</option>
-            </style>
-        </div>
-
         <div id="dp"></div>
     </div>
 
@@ -95,9 +88,31 @@
 
     // event creating
     dp.onTimeRangeSelected = function (args) {
-        var name = prompt("New event name:", "Event")
+        var subject = prompt("New event subject:", "Event")
+        var description = prompt("New event description:", "Event")
+        var isExam = prompt("Is new event an exam:", "Please \"true\" or \"false\"")
         dp.clearSelection();
-        if (!name) {
+        if (!subject) {
+            return;
+        }
+        if (!description) {
+            return;
+        }
+        if(!isExam)
+        {
+            return;
+        }
+        var isExamBool;
+        if(isExam == "true")
+        {
+            isExamBool = true;
+        }
+        else if(isExam == "false")
+        {
+            isExamBool = false;
+        }
+        else
+        {
             return;
         }
 
@@ -107,7 +122,10 @@
             data: {
                 start: args.start,
                 end: args.end,
-                text: name
+                text: "Course of " + subject + "\nDescription : " + description,
+                description: description,
+                subject: subject
+
             },
             success: function (ajax) {
                 var data = ajax.data;
@@ -115,7 +133,9 @@
                     start: args.start,
                     end: args.end,
                     id: data.id,
-                    text: name
+                    text: "Course of " + subject + "\nDescription : " + description,
+                    description: description,
+                    subject: subject
                 }));
                 console.log("Created.");
             }
@@ -123,7 +143,7 @@
     };
 
     dp.onEventClick = function (args) {
-        alert("clicked: " + args.e.id());
+        alert("IsExam: ");
     };
 
     dp.init();

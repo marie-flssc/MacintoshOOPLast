@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using static OOP_CA_Macintosh.Utils.timeTableUtils;
 
 namespace OOP_CA_Macintosh.Controllers
 {
@@ -26,7 +27,7 @@ namespace OOP_CA_Macintosh.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View( _context.Courses);
+            return View(GetEvent(getUserId(), _context.Events.ToList()));
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -36,7 +37,7 @@ namespace OOP_CA_Macintosh.Controllers
                 return NotFound();
             }
 
-            var timeTable = await _context.Courses
+            var timeTable = await _context.Events
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (timeTable == null)
             {
@@ -53,7 +54,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Start,End,Name,Color")] StudentToClass timeTable)
+        public async Task<IActionResult> Create([Bind("Id,Start,End,Subject,Color,Description")] Events timeTable)
         {
             if (ModelState.IsValid)
             {
@@ -71,7 +72,7 @@ namespace OOP_CA_Macintosh.Controllers
                 return NotFound();
             }
 
-            var courses = await _context.Courses.FindAsync(id);
+            var courses = await _context.Events.FindAsync(id);
             if (courses == null)
             {
                 return NotFound();
@@ -82,7 +83,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Start,End,Name,Color")] Courses course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Start,End,Subject,Color,Description")] Events course)
         {
             if (id != course.Id)
             {
@@ -120,7 +121,7 @@ namespace OOP_CA_Macintosh.Controllers
                 return NotFound();
             }
 
-            var timeTable = await _context.Courses
+            var timeTable = await _context.Events
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (timeTable == null)
             {
@@ -134,15 +135,29 @@ namespace OOP_CA_Macintosh.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var courses = await _context.Courses.FindAsync(id);
-            _context.Courses.Remove(courses);
+            var courses = await _context.Events.FindAsync(id);
+            _context.Events.Remove(courses);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool TimeTableExists(int id)
         {
-            return _context.Courses.Any(e => e.Id == id);
+            return _context.Events.Any(e => e.Id == id);
+        }
+
+        private int getUserId()
+        {
+            try
+            {
+                String userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                User user = _context.User.ToList().Find(x => x.Username.Equals(userId));
+                return user.Id;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
         }
     }
 }
