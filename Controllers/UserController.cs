@@ -136,7 +136,7 @@ namespace OOP_CA_Macintosh.Controllers
             {
                 _context.Add(modelUser);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Login));
+                return RedirectToAction(nameof(Secured));
             }
             return RedirectToAction("Login", "User");
         }
