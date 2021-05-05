@@ -107,6 +107,8 @@ namespace OOP_CA_Macintosh.Controllers
             return View(model);
         }
 
+        [HttpGet("Create")]
+
         public IActionResult Create()
         {
             return View();
@@ -139,10 +141,14 @@ namespace OOP_CA_Macintosh.Controllers
             return RedirectToAction("Login", "User");
         }
 
+        public IActionResult SeeClass()
+        {
+            return View();
+        }
 
-        [HttpGet]
+        [HttpGet("SeeClass")]
         [ValidateAntiForgeryToken]
-        public IActionResult GetAllStudents()
+        public IActionResult SeeClass(string returnUrl)
         {
             var res = new List<User>();
             int id = getUserId();

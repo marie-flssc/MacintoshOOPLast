@@ -1,0 +1,48 @@
+﻿
+
+@model IEnumerable<OOP_CA_Macintosh.Models.User>
+
+@if (User.IsInRole("Admin") || User.IsInRole("Student"))
+{
+    <h1>This Section is for teachers who wish to see their class</h1>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p>Last Name</p>
+                </th>
+                <th>
+                    <p>First Name</p>
+                </th>
+                <th>
+                    <p>Email</p>
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <a asp-action="Index" asp-route-id="@item.Id">Add Grade</a> |
+                        <a asp-action="Secured" asp-route-id="@item.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -35,6 +35,8 @@ namespace OOP_CA_Macintosh.Controllers
             return View();
         }
 
+        [HttpGet]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)

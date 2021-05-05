@@ -48,13 +48,16 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">My timetable</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">See All Students</a>
                             </li>
                         }
                         @if (User.IsInRole("Faculty"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">My timetable</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="SeeClass">My Students</a>
                             </li>
                         }
 
