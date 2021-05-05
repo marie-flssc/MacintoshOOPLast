@@ -21,6 +21,11 @@ namespace OOP_CA_Macintosh.Data
         public DbSet<Fee> Fees { get; set; }
         public DbSet<StudentToClass> Timetable { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Grade>().Property(x => x.subject).HasConversion(v => v.ToString(), v => (Subj)Enum.Parse(typeof(Subj), v));
+        }
+
 
     }
 }

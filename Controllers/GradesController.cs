@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using static OOP_CA_Macintosh.Utils.gradeUtils;
 
 namespace OOP_CA_Macintosh.Controllers
 {
@@ -23,7 +24,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         public IActionResult Index()
         {
-            return View(_context.Grades.ToList().FindAll(x => x.StudentId == getUserId()));
+            return View(getGrade(getUserId(), _context.Grades.ToList()));
         }
         public IActionResult Add()
         {
@@ -149,7 +150,7 @@ namespace OOP_CA_Macintosh.Controllers
             try
             {
                 String userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var user = _context.User.ToList().Find(x => x.Username.Equals(userId));
+                User user = _context.User.ToList().Find(x => x.Username.Equals(userId));
                 return user.Id;
             }
             catch (Exception)
