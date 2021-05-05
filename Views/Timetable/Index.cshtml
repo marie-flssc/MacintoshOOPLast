@@ -89,29 +89,34 @@
     // event creating
     dp.onTimeRangeSelected = function (args) {
         var subject = prompt("New event subject:", "Event")
-        var description = prompt("New event description:", "Event")
-        var isExam = prompt("Is new event an exam:", "Please \"true\" or \"false\"")
         dp.clearSelection();
         if (!subject) {
             return;
         }
+        var description = prompt("New event description:", "Event")
         if (!description) {
             return;
         }
-        if(!isExam)
+        var isExamP = prompt("Is new event an exam:", "Please \"true\" or \"false\"")
+        if(!isExamP)
         {
             return;
         }
-        var isExamBool;
-        if(isExam == "true")
+        var isExam;
+        if(isExamP == "true")
         {
-            isExamBool = true;
+            isExam = true;
         }
-        else if(isExam == "false")
+        else if(isExamP == "false")
         {
-            isExamBool = false;
+            isExam = false;
         }
         else
+        {
+            return;
+        }
+        var facultyId = parseInt(prompt("Professor Id:", "0"), 10);
+        if(!facultyId)
         {
             return;
         }
@@ -124,7 +129,9 @@
                 end: args.end,
                 text: "Course of " + subject + "\nDescription : " + description,
                 description: description,
-                subject: subject
+                subject: subject,
+                facultyId: facultyId,
+                isExam: isExam
 
             },
             success: function (ajax) {
@@ -135,7 +142,9 @@
                     id: data.id,
                     text: "Course of " + subject + "\nDescription : " + description,
                     description: description,
-                    subject: subject
+                    subject: subject,
+                    facultyId: facultyId,
+                    isExam: isExam
                 }));
                 console.log("Created.");
             }
@@ -143,7 +152,14 @@
     };
 
     dp.onEventClick = function (args) {
-        alert("IsExam: ");
+        if(args.e.isExam())
+        {
+            alert("Course of " + args.e.subject() + "\nDescription : " + args.e.description() + "\n\nIt's an exam!!!!");
+        }
+        else
+        {
+            alert("Course of " + args.e.subject() + "\nDescription : " + args.e.description() + "\n\nIt's not an exam...");
+        }
     };
 
     dp.init();

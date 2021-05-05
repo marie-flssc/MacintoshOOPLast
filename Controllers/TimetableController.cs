@@ -54,7 +54,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Start,End,Subject,Color,Description")] Events timeTable)
+        public async Task<IActionResult> Create([Bind("Id,Start,End,Subject,Color,Description,FacultyId,IsExam")] Events timeTable)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Start,End,Subject,Color,Description")] Events course)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Start,End,Subject,Color,DescriptionFacultyId,IsExam")] Events course)
         {
             if (id != course.Id)
             {
