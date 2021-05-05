@@ -7,6 +7,7 @@ using OOP_CA_Macintosh.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OOP_CA_Macintosh.Controllers
@@ -22,7 +23,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(_context.Grades.ToList().FindAll(x => x.StudentId == getUserId()));
         }
         public IActionResult Add()
         {
@@ -141,6 +142,20 @@ namespace OOP_CA_Macintosh.Controllers
         private bool GradeExists(int id)
         {
             return _context.Grades.Any(e => e.Id == id);
+        }
+
+        private int getUserId()
+        {
+            try
+            {
+                String userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _context.User.ToList().Find(x => x.Username.Equals(userId));
+                return user.Id;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
         }
     }
 }

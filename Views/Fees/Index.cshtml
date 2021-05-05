@@ -1,13 +1,53 @@
 ﻿@*
-   
+
     //TODO If admin or faculty, does not show the page or just "you have no fees to pay"
 
 *@
-@if(User.IsInRole("Admin")|| User.IsInRole("Faculty"))
+
+@model IEnumerable<OOP_CA_Macintosh.Models.Fee>
+
+@if (User.IsInRole("Admin") || User.IsInRole("Faculty"))
 {
     <h1>This Section is restricted to Student for tuiton fees</h1>
 }
-else 
+else
 {
-    <h1>You have no fees to pay </h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p>AmountToPay</p>
+                </th>
+                <th>
+                    <p>PayedAmount</p>
+                </th>
+                <th>
+                    <p>Name</p>
+                </th>
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AmountToPay)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PayedAmount)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }

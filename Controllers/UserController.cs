@@ -71,13 +71,10 @@ namespace OOP_CA_Macintosh.Controllers
             return View();
         }
 
-        [HttpGet("Create")]
-        public IActionResult Create()
+        public IActionResult Edit()
         {
             return View();
         }
-
-        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -110,6 +107,10 @@ namespace OOP_CA_Macintosh.Controllers
             return View(model);
         }
 
+        public IActionResult Create()
+        {
+            return View();
+        }
 
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]

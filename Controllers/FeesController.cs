@@ -30,7 +30,10 @@ namespace OOP_CA_Macintosh.Controllers
             return View(_context.Fees.ToList().FindAll(x=>x.StudentId == getUserId()));
         }
 
-
+        public IActionResult Details()
+        {
+            return View();
+        }
 
         public async Task<IActionResult> Details(int? id)
         {
@@ -48,6 +51,7 @@ namespace OOP_CA_Macintosh.Controllers
 
             return View(payment);
         }
+
 
         public async Task<IActionResult> Pay(int? id)
         {

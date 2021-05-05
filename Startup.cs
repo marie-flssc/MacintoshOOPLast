@@ -32,21 +32,6 @@ namespace OOP_CA_Macintosh
                 {
                     options.LoginPath = "/Login";
                     options.AccessDeniedPath = "/Home";
-                    /*options.Events = new CookieAuthenticationEvents()
-                    {
-                        OnSigningIn = async Context =>
-                        {
-                            await Task.CompletedTask;
-                        },
-                        OnSignedIn = async Context =>
-                        {
-                            await Task.CompletedTask;
-                        },
-                        OnValidatePrincipal = async Context =>
-                        {
-                            await Task.CompletedTask;
-                        }
-                    };*/
                    
                 });
 

@@ -21,42 +21,48 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if(User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Secured">Account</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Secured">Account</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Secured">Login</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Secured">Login</a>
                             </li>
                         }
-                        @if(User.IsInRole("Student"))
+                        @if (User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">My timetable</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Fees" asp-action="Index">My Fees</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Grades" asp-action="Index">My Grades</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">My timetable</a>
                             </li>
                         }
-                        @if(User.IsInRole("Admin"))
+                        @if (User.IsInRole("Faculty"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">My timetable</a>
                             </li>
                         }
-                        @if(User.IsInRole("Faculty"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">My timetable</a>
-                            </li>
-                        }
-                        
+
                         @if (User.Identity.IsAuthenticated)
                         {
                             <div style="text-align: right">
                                 <li class="nav-item" style="position:absolute;right:20px;">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Logout</a>
                                 </li>
                             </div>
                         }
@@ -64,7 +70,7 @@
                         {
                             <div style="text-align: right">
                                 <li class="nav-item" style="position:absolute;right:20px;">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Create">Register</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Create">Register</a>
                                 </li>
                             </div>
                         }

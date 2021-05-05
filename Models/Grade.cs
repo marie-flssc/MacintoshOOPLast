@@ -24,3 +24,4 @@ namespace OOP_CA_Macintosh.Models
         public Subj subject { get; set; }
     }
 }
+
