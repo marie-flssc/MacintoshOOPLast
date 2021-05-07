@@ -43,7 +43,7 @@ else
                 <td>
                     @if (User.IsInRole("Admin"))
                     {
-                        <a asp-action="Edit" asp-route-id="@Model.Id">Edit |</a>
+                        <a asp-action="Edit" asp-controller="User" asp-route-id="@Model.Id">Edit |</a>
                     }
                     @if (User.IsInRole("Faculty"))
                     {

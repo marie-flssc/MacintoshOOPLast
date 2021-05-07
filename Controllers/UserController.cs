@@ -96,62 +96,31 @@ namespace OOP_CA_Macintosh.Controllers
             return View(user);
         }
 
-
-        public async Task<IActionResult> Edit(int? id)
+        [HttpPut("Edit")]
+        public IActionResult Edit(int? id)
         {
+            Debug.WriteLine("puta");
             if (id == null)
             {
+                Debug.WriteLine("pute");
                 return NotFound();
             }
 
-            var movie = await _context.User.FindAsync(id);
-            if (movie == null)
+            var user = _context.User.ToList().Find(x=>x.Id == id);
+            if (user == null)
             {
+                Debug.WriteLine("puto");
                 return NotFound();
-            }
-            return View(movie);
-        }
-
-        
-        /*[HttpPut("Edit")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,FirstName,LastName,Email,Password,Role,Contact")] User user)
-        {
-            if (id != user.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(user);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UserExists(user.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction("Index","Home");
             }
             return View(user);
-        }*/
+        }
 
 
 
         [HttpPut("Edit")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AccessLevel.Admin)]
-        public IActionResult Edit(int id, [Bind("Firstname,LastName,Email,Username")] UpdateModel model)
+        public async Task<IActionResult> Edit(int id, [Bind("Firstname,LastName,Email,Username")] UpdateModel model)
         {
             if (ModelState.IsValid)
             {
@@ -172,15 +141,14 @@ namespace OOP_CA_Macintosh.Controllers
                 user.LastName = model.LastName;
                 user.Email = model.Email;
                 user.Username = model.Username;
-                _context.Entry(user).State = EntityState.Modified;
-                _context.SaveChanges();
+                _context.Update(user);
+                await _context.SaveChangesAsync();
                 return RedirectToAction("Index", "Home");
             }
             return View(model);
         }
 
         [HttpGet("Create")]
-
         public IActionResult Create()
         {
             return View();
