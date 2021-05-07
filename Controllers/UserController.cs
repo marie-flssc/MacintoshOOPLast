@@ -141,25 +141,21 @@ namespace OOP_CA_Macintosh.Controllers
             return RedirectToAction("Login", "User");
         }
 
-        public IActionResult SeeClass()
-        {
-            return View();
-        }
 
         [HttpGet("SeeClass")]
-        [ValidateAntiForgeryToken]
-        public IActionResult SeeClass(string returnUrl)
+        [Authorize(Roles = AccessLevel.Faculty)]
+        public IActionResult SeeClass()
         {
             var res = new List<User>();
             int id = getUserId();
             List<User> student = _context.User.ToList().FindAll(x => x.Role.Equals("Student"));
-            List<Courses> classe = _context.Courses.ToList().FindAll(x => x.FacultyId.Equals(id));
+            List<Events> classe = _context.Events.ToList().FindAll(x => x.FacultyId.Equals(id));
             var courseId = new List<int>();
-            foreach(Courses chr in classe) 
+            foreach(Events chr in classe) 
             {
                 courseId.Add(chr.Id);
             }
-            var studenttoclass = _context.Timetable;
+            var studenttoclass = _context.Timetable.ToList();
             foreach(StudentToClass st in studenttoclass)
             {
                 if(courseId.Contains(st.Course))
@@ -170,15 +166,22 @@ namespace OOP_CA_Macintosh.Controllers
             return View(res);
         }
 
-        [HttpGet]
-        [ValidateAntiForgeryToken]
+        [HttpGet("GetAllTeachers")]
+        [Authorize(Roles = AccessLevel.Admin)]
         public IActionResult GetAllTeachers()
         {
             return View(_context.User.ToList().FindAll(x => x.Role.Equals("Faculty")));
         }
 
+        [HttpGet("GetAllStudents")]
+        [Authorize(Roles = AccessLevel.Admin)]
+        public IActionResult GetAllStudents()
+        {
+            return View(_context.User.ToList().FindAll(x => x.Role.Equals("Student")));
+        }
+
         [HttpGet]
-        [ValidateAntiForgeryToken]
+        [Authorize(Roles = AccessLevel.Admin)]
         public IActionResult GetUsers()
         {
             return View(_context.User);
@@ -198,7 +201,5 @@ namespace OOP_CA_Macintosh.Controllers
                 return -1;
             }
         }
-
-
     }
 }

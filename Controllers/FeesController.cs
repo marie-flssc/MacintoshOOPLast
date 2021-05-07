@@ -26,7 +26,6 @@ namespace OOP_CA_Macintosh.Controllers
 
         public IActionResult Index()
         {
-            //TODO If admin or faculty, does not show the page or just "you have no fees to pay"
             return View(_context.Fees.ToList().FindAll(x=>x.StudentId == getUserId()));
         }
 
@@ -54,7 +53,7 @@ namespace OOP_CA_Macintosh.Controllers
             return View(payment);
         }
 
-
+        /*
         public async Task<IActionResult> Pay(int? id)
         {
             if (id == null)
@@ -69,58 +68,16 @@ namespace OOP_CA_Macintosh.Controllers
             }
             return View(fee);
         }
-
+        *//*
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Pay(int id, [Bind("Id,StudentId,AmountToPay,PayedAmount,Name")] Fee fee)
+        public async Task<IActionResult> Pay(int id, bool payed)
         {
-            if (id != fee.Id)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(fee);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!FeeExists(fee.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(fee);
-            /*
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var model = await _context.Fees
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (model == null)
-            {
-                return NotFound();
-            }
-            if (model.AmountToPay > model.PayedAmount)
-            {
-                
-                return View(model);
-                
-            }
-            TempData["Done"] = "You have already payed everything";
-            return RedirectToAction("Index", "Fees");*/
-        }
+            var fee = await _context.Fees.FirstOrDefaultAsync(x => x.Id == id);
+            fee.Payed = 
+                return 
+        }*/
 
 
         private int getUserId()

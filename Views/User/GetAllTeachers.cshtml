@@ -1,0 +1,48 @@
+﻿
+@model List<OOP_CA_Macintosh.Models.User>
+
+@if (User.IsInRole("Student") || User.IsInRole("Faculty"))
+{
+    <h1>This page is only available to Admins</h1>
+}
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p>First Name</p>
+                </th>
+                <th>
+                    <p>Last Name</p>
+                </th>
+                <th>
+                    <p>Email</p>
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <a asp-action="Pay" asp-route-id="@item.Id">Pay</a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

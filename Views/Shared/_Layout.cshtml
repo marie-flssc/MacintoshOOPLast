@@ -51,6 +51,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">See All Students</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="GetAllTeachers">See Teachers</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="GetAllStudents">See Students</a>
+                            </li>
                         }
                         @if (User.IsInRole("Faculty"))
                         {

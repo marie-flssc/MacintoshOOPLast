@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OOP_CA_Macintosh.Data;
@@ -92,3 +92,4 @@ namespace OOP_CA_Macintosh.Controllers
         }
     }
 }
+*/

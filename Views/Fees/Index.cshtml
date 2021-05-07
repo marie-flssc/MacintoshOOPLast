@@ -20,12 +20,12 @@ else
                     <p>Total Amount To Pay</p>
                 </th>
                 <th>
-                    <p>Payed Amount</p>
+                    <p>Payed</p>
                 </th>
                 <th>
                     <p>Name</p>
                 </th>
-                
+
                 <th></th>
             </tr>
         </thead>
@@ -37,17 +37,31 @@ else
                         @Html.DisplayFor(modelItem => item.AmountToPay)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.PayedAmount)
+                        @Html.DisplayFor(modelItem => item.Payed)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
-                        <a asp-action="Pay" asp-route-id="@item.Id">Pay</a> |
+                        @if (!item.Payed)
+                        {
+                            <input type="submit" value="Pay" class="btn btn-primary" />
+                        }
+                        else
+                        {
+                            <p>Already Payed</p>
+                        }
+                        |
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    <script>
+        function Pay(item) {
+            item.Payed = true
+        }
+    </script>
 }
+

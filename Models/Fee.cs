@@ -10,7 +10,7 @@ namespace OOP_CA_Macintosh.Models
         public int Id { get; set; }
         public int StudentId { get; set; }
         public int AmountToPay { get; set; }
-        public int PayedAmount { get; set; }
+        public bool Payed { get; set; }
         public string Name { get; set; }
        
     }
