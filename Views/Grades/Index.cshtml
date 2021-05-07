@@ -1,50 +1,60 @@
-﻿@model List<OOP_CA_Macintosh.Models.Grade>
+﻿@model IEnumerable<OOP_CA_Macintosh.Models.Grade>
+
+
 <body>
     <header>
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Grades"
-               asp-action="Create">Create</a>
-        </li>
+        <p class="nav-item">
+            @if (User.IsInRole("Faculty") || User.IsInRole("Admin"))
+            {
+                <a class="nav-link text-dark" asp-area="" asp-controller="Grades"
+                   asp-action="Create">Create</a>
+            }
+        </p>
+
     </header>
 
     <table class="table" , style="width:100%">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model[0].StudentId)
+                    @Html.DisplayNameFor(model => model.StudentId)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model[0].subject)
+                    @Html.DisplayNameFor(model => model.subject)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model[0].coef)
+                    @Html.DisplayNameFor(model => model.coef)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model[0].Result)
+                    @Html.DisplayNameFor(model => model.Result)
                 </th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StudentId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.subject)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.coef)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Result)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StudentId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.coef)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Result)
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Faculty") || User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
