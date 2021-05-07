@@ -26,16 +26,32 @@ namespace OOP_CA_Macintosh.Controllers
         {
             return View(getGrade(getUserId(), _context.Grades.ToList()));
         }
-        public IActionResult Add()
+
+        public IActionResult SeeStudentGrades(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            return View(getGrade(id.Value, _context.Grades.ToList()));
+        }
+
+        public IActionResult Create(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            TempData["id"] = "Please enter as student number : " + id.ToString();
             return View();
         }
 
         [Authorize(Roles = AccessLevel.Faculty)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Add([Bind("StudentId,subject,Result")] Grade model)
+        public async Task<IActionResult> Create(int? id,[Bind("StudentId,Coef,Subject,Result")] Grade model)
         {
+            TempData["id"] = "Please enter : " + id.ToString(); ;
             if (ModelState.IsValid)
             {
                 _context.Add(model);
@@ -80,9 +96,9 @@ namespace OOP_CA_Macintosh.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AccessLevel.Faculty)]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentId,subject,Result")] Grade model)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,StudentId,Subject,Result,Coef")] Grade model)
         {
-            if (id != model.Id)
+            if (id ==null)
             {
                 return NotFound();
             }
@@ -105,7 +121,7 @@ namespace OOP_CA_Macintosh.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("SeeClass","User");
             }
             return View(model);
         }

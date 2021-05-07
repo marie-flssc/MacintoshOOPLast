@@ -15,6 +15,7 @@ using OOP_CA_Macintosh.Helpers;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using OOP_CA_Macintosh.DTO;
+using System.Diagnostics;
 
 namespace OOP_CA_Macintosh.Controllers
 {
@@ -76,7 +77,78 @@ namespace OOP_CA_Macintosh.Controllers
             return View();
         }
 
-        [HttpPost]
+
+        [Authorize(Roles = "Faculty, Admin")]
+        public async Task<IActionResult> Profile(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.User
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var movie = await _context.User.FindAsync(id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+            return View(movie);
+        }
+
+        
+        /*[HttpPut("Edit")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Username,FirstName,LastName,Email,Password,Role,Contact")] User user)
+        {
+            if (id != user.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index","Home");
+            }
+            return View(user);
+        }*/
+
+
+
+        [HttpPut("Edit")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AccessLevel.Admin)]
         public IActionResult Edit(int id, [Bind("Firstname,LastName,Email,Username")] UpdateModel model)
@@ -116,7 +188,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,Username,Password,Role")] RegisterModel model)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,Username,Password,Role,Contact")] RegisterModel model)
         {
             User modelUser = new User();
             modelUser.FirstName = model.FirstName;
@@ -148,19 +220,23 @@ namespace OOP_CA_Macintosh.Controllers
         {
             var res = new List<User>();
             int id = getUserId();
-            List<User> student = _context.User.ToList().FindAll(x => x.Role.Equals("Student"));
-            List<Events> classe = _context.Events.ToList().FindAll(x => x.FacultyId.Equals(id));
+            //We get all classes of the professor
+            var classe = _context.Events.ToList().FindAll(x => x.FacultyId.Equals(id));
+            //here is the list where we keep all the ids of the classes of the professor
             var courseId = new List<int>();
             foreach(Events chr in classe) 
             {
                 courseId.Add(chr.Id);
             }
-            var studenttoclass = _context.Timetable.ToList();
-            foreach(StudentToClass st in studenttoclass)
+            //We get all the "students to class" (the links from the students to their classes)
+            var studenttoclass = _context.StudentToClass.ToList();
+            //We compare each id with the ids in the classes of the professor
+            foreach (StudentToClass st in studenttoclass)
             {
+                //if they are here we add the corresponding student
                 if(courseId.Contains(st.Course))
                 {
-                    res.Add(student.Find(x => x.Id.Equals(st.StudentId)));
+                    res.Add(_context.User.ToList().Find(x => x.Id.Equals(st.StudentId)));
                 }
             }
             return View(res);
@@ -201,5 +277,40 @@ namespace OOP_CA_Macintosh.Controllers
                 return -1;
             }
         }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.User
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var user = await _context.User.FindAsync(id);
+            _context.User.Remove(user);
+            await _context.SaveChangesAsync();
+            
+            return RedirectToAction("Index", "Home");
+        }
+
+        private bool UserExists(int id)
+        {
+            return _context.User.Any(e => e.Id == id);
+        }
     }
+    
+
 }

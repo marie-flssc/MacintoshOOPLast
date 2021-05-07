@@ -5,6 +5,7 @@ using OOP_CA_Macintosh.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace OOP_CA_Macintosh.Controllers
@@ -23,22 +24,38 @@ namespace OOP_CA_Macintosh.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(_context.Attendances.ToList().FindAll(x=>x.StudentId == getUserId()));
         }
 
-        public IActionResult Details()
+        [Authorize(Roles ="Faculty")]
+        //Only for the professors courses, a faculty cannot see the attendance for classes that do not concern them
+        public IActionResult SeeStudentAttendance(int? id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var profcourses = _context.Events.ToList().FindAll(x => x.FacultyId == getUserId());
+            var res = new List<int>();
+            foreach(var i in profcourses)
+            {
+                res.Add(i.Id);
+            }
+            return View(_context.Attendances.ToList().FindAll(x => x.StudentId ==id && res.Contains(x.CourseId)));
         }
 
-        public List<int> WhichStudentsMissedClass(int id)
+        private int getUserId()
         {
-            throw new NotImplementedException();
-        }
-
-        public void ChangeAttendance(bool present, int id)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                String userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = _context.User.ToList().Find(x => x.Username.Equals(userId));
+                return user.Id;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
         }
     }
 }

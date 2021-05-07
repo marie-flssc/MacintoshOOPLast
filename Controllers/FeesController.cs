@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using OOP_CA_Macintosh.Data;
+using OOP_CA_Macintosh.DTO;
 using OOP_CA_Macintosh.Models;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,32 @@ namespace OOP_CA_Macintosh.Controllers
             return View(_context.Fees.ToList().FindAll(x=>x.StudentId == getUserId()));
         }
 
+        public IActionResult Pay(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            return View( _context.Fees.ToList().Find(x => x.Id == id));
+        }
+
+        [HttpPut("Pay")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = AccessLevel.Student)]
+        public async Task<IActionResult> Pay(int id, [Bind("Id,StudentId,AmountToPay,Payed,Name")]Fee feeresult)
+        {
+            if (ModelState.IsValid)
+            {
+                var fee = _context.Fees.ToList().Find(x => x.Id == id);
+                fee.Payed = feeresult.Payed;
+                _context.Update(fee);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", "Fee");
+            }
+            return View(feeresult);
+        }
+
         public IActionResult Details()
         {
             return View();
@@ -52,32 +79,6 @@ namespace OOP_CA_Macintosh.Controllers
 
             return View(payment);
         }
-
-        /*
-        public async Task<IActionResult> Pay(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var fee = await _context.Fees.FindAsync(id);
-            if (fee == null)
-            {
-                return NotFound();
-            }
-            return View(fee);
-        }
-        *//*
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Pay(int id, bool payed)
-        {
-
-            var fee = await _context.Fees.FirstOrDefaultAsync(x => x.Id == id);
-            fee.Payed = 
-                return 
-        }*/
 
 
         private int getUserId()

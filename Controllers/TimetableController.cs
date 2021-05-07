@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using static OOP_CA_Macintosh.Utils.timeTableUtils;
+using System.Diagnostics;
 
 namespace OOP_CA_Macintosh.Controllers
 {
@@ -27,7 +28,40 @@ namespace OOP_CA_Macintosh.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View(GetEvent(getUserId(), _context.Events.ToList()));
+            Debug.WriteLine("hey");
+            int id = getUserId();
+            if (User.IsInRole("Student"))
+            {
+                Debug.WriteLine("student");
+                var studtoclass = _context.StudentToClass.ToList().FindAll(x => x.StudentId.Equals(id));
+                var res = new List<Events>();
+                var courseId = new List<int>();
+                foreach (StudentToClass chr in studtoclass)
+                {
+                    courseId.Add(chr.Course);
+                }
+                foreach (Events ev in _context.Events.ToList())
+                {
+                    //if they are here we add the corresponding student
+                    if (courseId.Contains(ev.Id))
+                    {
+                        res.Add(ev);
+                    }
+                }
+                return View(res);
+            }
+            else if(User.IsInRole("Faculty"))
+            {
+                Debug.WriteLine("Faculty");
+                var classes = _context.Events.ToList().FindAll(x => x.FacultyId == id);
+                Debug.WriteLine(classes.Count());
+                return View(classes);
+            }
+            else
+            {
+                Debug.WriteLine("admin");
+                return View( _context.Events.ToList());
+            }
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -54,6 +88,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Start,End,Subject,Color,Description,FacultyId,IsExam")] Events timeTable)
         {
             if (ModelState.IsValid)
@@ -113,7 +148,6 @@ namespace OOP_CA_Macintosh.Controllers
             return View(course);
         }
 
-        //TODO DELETE STUDENTTOCLASSASWELL
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

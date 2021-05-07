@@ -45,23 +45,17 @@ else
                     <td>
                         @if (!item.Payed)
                         {
-                            <input type="submit" value="Pay" class="btn btn-primary" />
+                        <a asp-action="Pay" asp-route-id="@item.Id">Pay</a>
                         }
                         else
                         {
-                            <p>Already Payed</p>
+                            <p>Already Payed |</p>
                         }
-                        |
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-    <script>
-        function Pay(item) {
-            item.Payed = true
-        }
-    </script>
 }
 

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var id = TempData["id"] as string;
 }
 
 <h1>Create</h1>
@@ -13,26 +14,27 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <h3>@id </h3>
                 <label asp-for="StudentId" class="control-label"></label>
                 <input asp-for="StudentId" class="form-control" />
                 <span asp-validation-for="StudentId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="subject" class="control-label"></label>
-                <select asp-for="subject">
-                    <option value="it">IT</option>
-                    <option value="english">English</option>
-                    <option value="maths">Maths</option>
-                    <option value="physics">Physics</option>
-                    <option value="history">History</option>
-                    <option value="geograhy">Geography</option>
+                <label asp-for="Subject" class="control-label"></label>
+                <select asp-for="Subject">
+                    <option value="IT">IT</option>
+                    <option value="ENGLISH">English</option>
+                    <option value="MATHS">Maths</option>
+                    <option value="PHYSICS">Physics</option>
+                    <option value="HISTORY">History</option>
+                    <option value="GEOGRAPHY">Geography</option>
                 </select>
-                <span asp-validation-for="subject" class="text-danger"></span>
+                <span asp-validation-for="Subject" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="coef" class="control-label"></label>
-                <input asp-for="coef" class="form-control" />
-                <span asp-validation-for="coef" class="text-danger"></span>
+                <label asp-for="Coef" class="control-label"></label>
+                <input asp-for="Coef" class="form-control" />
+                <span asp-validation-for="Coef" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Result" class="control-label"></label>
@@ -48,7 +50,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="SeeClass" asp-controller="User">Back to List</a>
 </div>
 
 @section Scripts {

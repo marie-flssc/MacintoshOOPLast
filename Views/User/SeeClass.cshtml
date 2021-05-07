@@ -1,6 +1,6 @@
 ﻿
 
-@model IEnumerable<OOP_CA_Macintosh.Models.User>
+@model List<OOP_CA_Macintosh.Models.User>
 
 @if (User.IsInRole("Admin") || User.IsInRole("Student"))
 {
@@ -38,8 +38,7 @@ else
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
-                        <a asp-action="Index" asp-route-id="@item.Id">Add Grade</a> |
-                        <a asp-action="Secured" asp-route-id="@item.Id">Details</a>
+                        <a asp-action="Profile" asp-route-id="@item.Id">Profile</a>
                     </td>
                 </tr>
             }

@@ -45,11 +45,14 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Grades" asp-action="Index">My Grades</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Attendance" asp-action="Index">My Attendance</a>
+                            </li>
                         }
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">See All Students</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Index">See All Courses</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="GetAllTeachers">See Teachers</a>

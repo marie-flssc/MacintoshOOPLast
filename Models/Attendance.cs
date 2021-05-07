@@ -10,7 +10,7 @@ namespace OOP_CA_Macintosh.Models
         public int Id { get; set; }
         public int CourseId { get; set; }
         public bool Present { get; set; }
-        public int StudentsId { get; set; }
+        public int StudentId { get; set; }
 
     }
 }

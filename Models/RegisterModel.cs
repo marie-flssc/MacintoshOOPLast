@@ -20,5 +20,6 @@ namespace OOP_CA_Macintosh.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
+        public string Contact { get; set; }
     }
 }
