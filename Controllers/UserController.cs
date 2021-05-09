@@ -72,11 +72,6 @@ namespace OOP_CA_Macintosh.Controllers
             return View();
         }
 
-        public IActionResult Edit()
-        {
-            return View();
-        }
-
 
         [Authorize(Roles = "Faculty, Admin")]
         public async Task<IActionResult> Profile(int? id)
@@ -96,32 +91,28 @@ namespace OOP_CA_Macintosh.Controllers
             return View(user);
         }
 
-        [HttpPut("Edit")]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id, String returnUrl)
         {
-            Debug.WriteLine("puta");
+            ViewData["ReturnUrl"] = returnUrl;
             if (id == null)
             {
-                Debug.WriteLine("pute");
                 return NotFound();
             }
 
-            var user = _context.User.ToList().Find(x=>x.Id == id);
-            if (user == null)
+            var fee = await _context.User.FindAsync(id);
+            if (fee == null)
             {
-                Debug.WriteLine("puto");
                 return NotFound();
             }
-            return View(user);
+            return View(fee);
         }
 
 
-
-        [HttpPut("Edit")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = AccessLevel.Admin)]
-        public async Task<IActionResult> Edit(int id, [Bind("Firstname,LastName,Email,Username")] UpdateModel model)
+        public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Email,Username,Contact")] UpdateModel model, String returnUrl)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
                 var user = _context.User.ToList().Find(x => x.Id.Equals(id));
@@ -129,6 +120,10 @@ namespace OOP_CA_Macintosh.Controllers
                 {
                     return BadRequest(new { message = "This user does not exist." });
                 }
+                Console.WriteLine("la" + model.FirstName);
+                Console.WriteLine("catain" + model.LastName);
+                Console.WriteLine(model.Email);
+                Console.WriteLine(model.Username);
 
                 if ((string.IsNullOrEmpty(model.FirstName)) || (string.IsNullOrEmpty(model.LastName))
                     || (string.IsNullOrEmpty(model.Email)) || (string.IsNullOrEmpty(model.Username)))
@@ -141,9 +136,11 @@ namespace OOP_CA_Macintosh.Controllers
                 user.LastName = model.LastName;
                 user.Email = model.Email;
                 user.Username = model.Username;
+                user.Contact = model.Contact;
                 _context.Update(user);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Profile", new { 
+                    id = id}); 
             }
             return View(model);
         }

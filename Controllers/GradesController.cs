@@ -98,11 +98,6 @@ namespace OOP_CA_Macintosh.Controllers
         [Authorize(Roles = AccessLevel.Faculty)]
         public async Task<IActionResult> Edit(int id, [Bind("Id,StudentId,Subject,Result,Coef")] Grade model)
         {
-            if (id ==null)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
