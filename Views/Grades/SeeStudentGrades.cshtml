@@ -45,7 +45,7 @@
                         @if (User.IsInRole("Faculty"))
                         {
                             <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><p>|</p>
-                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a asp-action="Remove" asp-route-id="@item.Id">Delete</a>
                         }
 
                     </td>

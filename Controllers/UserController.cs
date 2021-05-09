@@ -110,6 +110,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AccessLevel.Admin)]
         public async Task<IActionResult> Edit(int id, [Bind("FirstName,LastName,Email,Username,Contact")] UpdateModel model, String returnUrl)
         {
             ViewData["ReturnUrl"] = returnUrl;
@@ -120,10 +121,6 @@ namespace OOP_CA_Macintosh.Controllers
                 {
                     return BadRequest(new { message = "This user does not exist." });
                 }
-                Console.WriteLine("la" + model.FirstName);
-                Console.WriteLine("catain" + model.LastName);
-                Console.WriteLine(model.Email);
-                Console.WriteLine(model.Username);
 
                 if ((string.IsNullOrEmpty(model.FirstName)) || (string.IsNullOrEmpty(model.LastName))
                     || (string.IsNullOrEmpty(model.Email)) || (string.IsNullOrEmpty(model.Username)))

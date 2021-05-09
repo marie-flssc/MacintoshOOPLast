@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using OOP_CA_Macintosh.DTO;
+using OOP_CA_Macintosh.Models;
 
 namespace OOP_CA_Macintosh.Controllers
 {
@@ -42,6 +44,42 @@ namespace OOP_CA_Macintosh.Controllers
                 res.Add(i.Id);
             }
             return View(_context.Attendances.ToList().FindAll(x => x.StudentId ==id && res.Contains(x.CourseId)));
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var attendance = await _context.Attendances.FindAsync(id);
+            if (attendance == null)
+            {
+                return NotFound();
+            }
+            return View(attendance);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = AccessLevel.Faculty)]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CourseId,Present,StudentId")] Attendance model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = _context.Attendances.ToList().Find(x => x.Id.Equals(id));
+                if (user == null)
+                {
+                    return BadRequest(new { message = "This user does not exist." });
+                }
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("SeeStudentAttendance", new { 
+                    id = model.StudentId}); 
+            }
+            return View(model);
         }
 
         private int getUserId()

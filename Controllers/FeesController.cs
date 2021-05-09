@@ -30,19 +30,25 @@ namespace OOP_CA_Macintosh.Controllers
             return View(_context.Fees.ToList().FindAll(x=>x.StudentId == getUserId()));
         }
 
-        public IActionResult Pay(int? id)
+        public async Task<IActionResult> Pay(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-            return View( _context.Fees.ToList().Find(x => x.Id == id));
+
+            var fee = await _context.Fees.FindAsync(id);
+            if (fee == null)
+            {
+                return NotFound();
+            }
+            return View(fee);
         }
 
-        [HttpPut("Pay")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AccessLevel.Student)]
-        public async Task<IActionResult> Pay(int id, [Bind("Id,StudentId,AmountToPay,Payed,Name")]Fee feeresult)
+        public async Task<IActionResult> Pay(int id, [Bind("Id,StudentId,AmountToPay,Payed,Name")] Fee feeresult)
         {
             if (ModelState.IsValid)
             {
@@ -51,7 +57,8 @@ namespace OOP_CA_Macintosh.Controllers
                 _context.Update(fee);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Fee");
+               return RedirectToAction("Index", new { 
+                    id = id});
             }
             return View(feeresult);
         }

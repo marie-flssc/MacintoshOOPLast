@@ -56,7 +56,8 @@ namespace OOP_CA_Macintosh.Controllers
             {
                 _context.Add(model);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("SeeStudentGrades", new { 
+                    id = model.StudentId});
             }
             return View(model);
         }
@@ -116,7 +117,8 @@ namespace OOP_CA_Macintosh.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("SeeClass","User");
+                return RedirectToAction("SeeStudentGrades", new { 
+                    id = model.StudentId}); 
             }
             return View(model);
         }
@@ -148,7 +150,8 @@ namespace OOP_CA_Macintosh.Controllers
             var model = await _context.Grades.FindAsync(id);
             _context.Grades.Remove(model);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("SeeStudentGrades", new { 
+                    id = model.StudentId});
         }
 
         private bool GradeExists(int id)
