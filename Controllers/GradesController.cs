@@ -49,11 +49,12 @@ namespace OOP_CA_Macintosh.Controllers
         [Authorize(Roles = AccessLevel.Faculty)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int? id,[Bind("StudentId,Coef,Subject,Result")] Grade model)
+        public async Task<IActionResult> Create(int id,[Bind("StudentId,Coef,Subject,Result")] Grade model)
         {
             TempData["id"] = "Please enter : " + id.ToString(); ;
             if (ModelState.IsValid)
             {
+                model.StudentId = id;
                 _context.Add(model);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("SeeStudentGrades", new { 

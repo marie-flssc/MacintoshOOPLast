@@ -86,7 +86,34 @@ namespace OOP_CA_Macintosh.Controllers
 
             return View(payment);
         }
+        
+        public IActionResult Create(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            return View();
+        }
 
+        [Authorize(Roles = AccessLevel.Admin)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(int id, [Bind("StudentId,AmountToPay,Name,Payed")] Fee model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.StudentId = id;
+                model.Payed = false;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Profile","User", new
+                {
+                    id = model.StudentId
+                });
+            }
+            return View(model);
+        }
 
         private int getUserId()
         {

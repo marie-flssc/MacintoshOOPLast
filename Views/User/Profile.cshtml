@@ -44,6 +44,7 @@ else
                     @if (User.IsInRole("Admin"))
                     {
                         <a asp-action="Edit" asp-route-id="@Model.Id">Edit |</a>
+                        <a asp-action="Create" asp-controller="Fees" asp-route-id="@Model.Id">Add Fee |</a>
                     }
                     @if (User.IsInRole("Faculty"))
                     {
