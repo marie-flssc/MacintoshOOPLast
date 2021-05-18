@@ -179,12 +179,15 @@ namespace OOP_CA_Macintosh.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Register(int? id)
+
+        public async Task<IActionResult> RegisterToCourse(int? id)
         {
+            Debug.WriteLine("1er");
             if (id == null)
             {
                 return NotFound();
             }
+           
 
             var timeTable = await _context.Events
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -193,21 +196,20 @@ namespace OOP_CA_Macintosh.Controllers
                 return NotFound();
             }
 
-            return View(timeTable);
+            bool register = false;
+            return View(register);
         }
 
-        [HttpPost("Register")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles =  "Student")]
-        public async Task<IActionResult> Register(int id,[FromQuery]bool register)
+        public async Task<IActionResult> RegisterToCourse(int id)
         {
-             if(register)
-             {
+
                 StudentToClass st = new StudentToClass { Course = id, StudentId = getUserId() };
                 _context.StudentToClass.Add(st);
                 await _context.SaveChangesAsync();
-             }
-            return RedirectToAction("Index", "Timetable");
+            return RedirectToAction("AllCourses", "Timetable");
         }
 
         [Authorize(Roles = "Student")]

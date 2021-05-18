@@ -48,7 +48,7 @@
                         @Html.DisplayFor(modelItem => item.IsExam)
                     </td>
                     <td>
-                        <a asp-controller="Timetable"  asp-action="Register" asp-route-id="@item.Id">Register</a>
+                        <a asp-action="RegisterToCourse" asp-controller="Timetable"  asp-route-id="@item.Id">Register</a>
                     </td>
                 </tr>
             }
