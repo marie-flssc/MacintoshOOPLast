@@ -1,0 +1,57 @@
+﻿@model IEnumerable<OOP_CA_Macintosh.Models.Events>
+
+
+<body>
+    <header>
+        <p class="nav-item">
+        </p>
+
+    </header>
+
+    <table class="table" , style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Subject
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Start
+                </th>
+                <th>
+                    End
+                </th>
+                <th>
+                    Exam
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Start)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.End)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsExam)
+                    </td>
+                    <td>
+                        <a asp-controller="Timetable"  asp-action="Register" asp-route-id="@item.Id">Register</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>

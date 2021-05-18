@@ -1,171 +1,298 @@
-﻿@model IEnumerable<OOP_CA_Macintosh.Models.Events>
+﻿@*We tried to implement a proper timetable, however even with our efforts, we could not make it work the way we wanted :
 
-@{
-    ViewData["Title"] = "Index";
-}
+    - Every user had the same timetable, and the model underneath was never used (we tried to crete a function to get the correct events in the load events part, but when we added it
+    the timetable dissapeared )
+    -All users could add and delete events
+    -We could make it work fine if it was a basic event, however when we added a FacultyId and refreshed the page, the event appeared as "undefined"
 
-<h1>Time Table</h1>
+    Because of all of this we switched to a simpler version, though it now appears as a list instead of a real timetable
+    The result we had before is what is shown in the video linked to the powerpoint*@
 
-@section Head{
-    <link type="text/css" rel="stylesheet" href="themes/calendar_g.css" />
-    <link type="text/css" rel="stylesheet" href="themes/calendar_green.css" />
-    <link type="text/css" rel="stylesheet" href="themes/calendar_traditional.css" />
-    <link type="text/css" rel="stylesheet" href="themes/calendar_transparent.css" />
-    <link type="text/css" rel="stylesheet" href="themes/calendar_white.css" />
-}
+@model IEnumerable<OOP_CA_Macintosh.Models.Events>
 
-<div style="display: flex">
+@{ 
+    List<Events> H = TempData["All"] as List<Events>;
+ }
 
-    <div style="margin-right: 10px;">
-        <div id="nav"></div>
+<body>
+    <header>
+        <p class="nav-item">
+        </p>
+        @if (User.IsInRole("Student"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="AllCourses"> Register to new course </a>
+            </li>
+        }
+        @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Timetable" asp-action="Create"> Create new course </a>
+            </li>
+        }
+    </header>
+    
+    <table class="table" , style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Subject
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    Start
+                </th>
+                <th>
+                    End
+                </th>
+                <th>
+                    Exam
+                </th>
+            </tr>
+        </thead>
+        @*Here are displayed future classes*@
+        <tr><td><h2>Relevant classes </h2></td></tr>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Start)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.End)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsExam)
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+            @*Here are displayed all classes relevant to the user*@
+            <tr><td><h2>All classes                                                                                                 </h2></td></tr>
+            @foreach (var item in H)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Start)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.End)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsExam)
+                    </td>
+                    <td>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+
+
+
+
+
+
+
+
+@*
+    @model IEnumerable<OOP_CA_Macintosh.Models.Events>
+
+    @{
+        ViewData["Title"] = "Index";
+    }
+
+    <h1>Time Table</h1>
+
+    @section Head{
+        <link type="text/css" rel="stylesheet" href="themes/calendar_g.css" />
+        <link type="text/css" rel="stylesheet" href="themes/calendar_green.css" />
+        <link type="text/css" rel="stylesheet" href="themes/calendar_traditional.css" />
+        <link type="text/css" rel="stylesheet" href="themes/calendar_transparent.css" />
+        <link type="text/css" rel="stylesheet" href="themes/calendar_white.css" />
+    }
+
+    <div style="display: flex">
+
+        <div style="margin-right: 10px;">
+            <div id="nav"></div>
+        </div>
+
+        <div style="flex-grow: 1;">
+            <div id="dp"></div>
+        </div>
+
     </div>
 
-    <div style="flex-grow: 1;">
-        <div id="dp"></div>
-    </div>
+    <script src="~/lib/daypilot/daypilot-all.min.js" asp-append-version="true"></script>
+    <script>
+        var nav = new DayPilot.Navigator("nav");
+        nav.showMonths = 3;
+        nav.skipMonths = 3;
+        nav.selectMode = "week";
+        nav.onTimeRangeSelected = function (args) {
+            dp.startDate = args.day;
+            dp.update();
+            loadEvents();
+        };
+        nav.init();
 
-</div>
+        var dp = new DayPilot.Calendar("dp");
+        dp.viewType = "Week";
 
-<script src="~/lib/daypilot/daypilot-all.min.js" asp-append-version="true"></script>
-<script>
-    var nav = new DayPilot.Navigator("nav");
-    nav.showMonths = 3;
-    nav.skipMonths = 3;
-    nav.selectMode = "week";
-    nav.onTimeRangeSelected = function (args) {
-        dp.startDate = args.day;
-        dp.update();
-        loadEvents();
-    };
-    nav.init();
+        dp.eventDeleteHandling = "Update";
 
-    var dp = new DayPilot.Calendar("dp");
-    dp.viewType = "Week";
+        dp.onEventDeleted = function (args) {
+            DayPilot.Http.ajax({
+                url: "/api/CalendarEvents/" + args.e.id(),
+                method: "DELETE",
+                success: function () {
+                    console.log("Deleted.");
+                }
+            });
+        };
 
-    dp.eventDeleteHandling = "Update";
+        dp.onEventMoved = function (args) {
+            DayPilot.Http.ajax({
+                url: "/api/CalendarEvents/" + args.e.id(),
+                method: "PUT",
+                data: {
+                    id: args.e.id(),
+                    start: args.newStart,
+                    end: args.newEnd,
+                    text: args.e.text()
+                },
+                success: function () {
+                    console.log("Resized.");
+                }
+            });
+        };
 
-    dp.onEventDeleted = function (args) {
-        DayPilot.Http.ajax({
-            url: "/api/CalendarEvents/" + args.e.id(),
-            method: "DELETE",
-            success: function () {
-                console.log("Deleted.");
+        dp.onEventResized = function (args) {
+            DayPilot.Http.ajax({
+                url: "/api/CalendarEvents/" + args.e.id(),
+                method: "PUT",
+                data: {
+                    id: args.e.id(),
+                    start: args.newStart,
+                    end: args.newEnd,
+                    text: args.e.text()
+                },
+                success: function () {
+                    console.log("Resized.");
+                }
+            });
+        };
+
+        // event creating
+        dp.onTimeRangeSelected = function (args) {
+            var subject = prompt("New event subject:", "Event")
+            dp.clearSelection();
+            if (!subject) {
+                return;
             }
-        });
-    };
-
-    dp.onEventMoved = function (args) {
-        DayPilot.Http.ajax({
-            url: "/api/CalendarEvents/" + args.e.id(),
-            method: "PUT",
-            data: {
-                id: args.e.id(),
-                start: args.newStart,
-                end: args.newEnd,
-                text: args.e.text()
-            },
-            success: function () {
-                console.log("Resized.");
+            var description = prompt("New event description:", "Event")
+            if (!description) {
+                return;
             }
-        });
-    };
-
-    dp.onEventResized = function (args) {
-        DayPilot.Http.ajax({
-            url: "/api/CalendarEvents/" + args.e.id(),
-            method: "PUT",
-            data: {
-                id: args.e.id(),
-                start: args.newStart,
-                end: args.newEnd,
-                text: args.e.text()
-            },
-            success: function () {
-                console.log("Resized.");
+            var isExamP = prompt("Is new event an exam:", "Please \"true\" or \"false\"")
+            if(!isExamP)
+            {
+                return;
             }
-        });
-    };
+            var isExam;
+            if(isExamP == "true")
+            {
+                isExam = true;
+            }
+            else if(isExamP == "false")
+            {
+                isExam = false;
+            }
+            else
+            {
+                return;
+            }
+            var facultyId = parseInt(prompt("Enter a Value", "0"), 10);
 
-    // event creating
-    dp.onTimeRangeSelected = function (args) {
-        var subject = prompt("New event subject:", "Event")
-        dp.clearSelection();
-        if (!subject) {
-            return;
-        }
-        var description = prompt("New event description:", "Event")
-        if (!description) {
-            return;
-        }
-        var isExamP = prompt("Is new event an exam:", "Please \"true\" or \"false\"")
-        if(!isExamP)
-        {
-            return;
-        }
-        var isExam;
-        if(isExamP == "true")
-        {
-            isExam = true;
-        }
-        else if(isExamP == "false")
-        {
-            isExam = false;
-        }
-        else
-        {
-            return;
-        }
-        var facultyId = parseInt(prompt("Enter a Value", "0"), 10);
-
-        DayPilot.Http.ajax({
-            url: "/api/CalendarEvents",
-            method: "POST",
-            data: {
-                start: args.start,
-                end: args.end,
-                text: "Course of " + subject + "\nDescription : " + description,
-                description: description,
-                subject: subject,
-                facultyId: facultyId,
-                isExam: isExam
-
-            },
-            success: function (ajax) {
-                var data = ajax.data;
-                dp.events.add(new DayPilot.Event({
+            DayPilot.Http.ajax({
+                url: "/api/CalendarEvents",
+                method: "POST",
+                data: {
                     start: args.start,
                     end: args.end,
-                    id: data.id,
                     text: "Course of " + subject + "\nDescription : " + description,
                     description: description,
                     subject: subject,
                     facultyId: facultyId,
                     isExam: isExam
-                }));
-                console.log("Created.");
-            }
+
+                },
+                success: function (ajax) {
+                    var data = ajax.data;
+                    dp.events.add(new DayPilot.Event({
+                        start: args.start,
+                        end: args.end,
+                        id: data.id,
+                        text: "Course of " + subject + "\nDescription : " + description,
+                        description: description,
+                        subject: subject,
+                        facultyId: facultyId,
+                        isExam: isExam
+                    }));
+                    console.log("Created.");
+                }
+            });
+        };
+
+        dp.onEventClick = function (args) {
+            alert("IsExam: " + Model.subject);
+        };
+
+        dp.init();
+
+        loadEvents();
+
+        function loadEvents() {
+            dp.events.load("/api/CalendarEvents");
+        }
+
+        var elements = {
+            theme: document.querySelector("#theme")
+        };
+
+        elements.theme.addEventListener("change", function () {
+            dp.theme = this.value;
+            dp.update();
         });
-    };
 
-    dp.onEventClick = function (args) {
-        alert("IsExam: " + Model.subject);
-    };
+    </script>
 
-    dp.init();
-
-    loadEvents();
-
-    function loadEvents() {
-        dp.events.load("/api/CalendarEvents");
-    }
-
-    var elements = {
-        theme: document.querySelector("#theme")
-    };
-
-    elements.theme.addEventListener("change", function () {
-        dp.theme = this.value;
-        dp.update();
-    });
-
-</script>
+*@

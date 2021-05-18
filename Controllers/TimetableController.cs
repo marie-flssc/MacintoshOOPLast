@@ -28,11 +28,9 @@ namespace OOP_CA_Macintosh.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            Debug.WriteLine("hey");
             int id = getUserId();
             if (User.IsInRole("Student"))
             {
-                Debug.WriteLine("student");
                 var studtoclass = _context.StudentToClass.ToList().FindAll(x => x.StudentId.Equals(id));
                 var res = new List<Events>();
                 var courseId = new List<int>();
@@ -48,19 +46,22 @@ namespace OOP_CA_Macintosh.Controllers
                         res.Add(ev);
                     }
                 }
-                return View(res);
+                List<Events> test = res;
+                TempData["All"] = test;
+                return View(RelevantCourses(res));
             }
             else if(User.IsInRole("Faculty"))
             {
-                Debug.WriteLine("Faculty");
                 var classes = _context.Events.ToList().FindAll(x => x.FacultyId == id);
-                Debug.WriteLine(classes.Count());
-                return View(classes);
+                TempData["All"] = classes;
+                return View(RelevantCourses(classes));
             }
             else
             {
-                Debug.WriteLine("admin");
-                return View( _context.Events.ToList());
+                var res = _context.Events.ToList();
+                List<Events> test = res;
+                TempData["All"] = test;
+                return View(RelevantCourses(res));
             }
         }
 
@@ -88,7 +89,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Start,End,Subject,Color,Description,FacultyId,IsExam")] Events timeTable)
         {
             if (ModelState.IsValid)
@@ -118,7 +119,8 @@ namespace OOP_CA_Macintosh.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Start,End,Subject,Color,DescriptionFacultyId,IsExam")] Events course)
+        [Authorize(Roles =  "Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Start,End,Subject,Color,Description,FacultyId,IsExam")] Events course)
         {
             if (id != course.Id)
             {
@@ -148,6 +150,7 @@ namespace OOP_CA_Macintosh.Controllers
             return View(course);
         }
 
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -167,6 +170,7 @@ namespace OOP_CA_Macintosh.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles =  "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var courses = await _context.Events.FindAsync(id);
@@ -175,10 +179,79 @@ namespace OOP_CA_Macintosh.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Register(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var timeTable = await _context.Events
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (timeTable == null)
+            {
+                return NotFound();
+            }
+
+            return View(timeTable);
+        }
+
+        [HttpPost("Register")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles =  "Student")]
+        public async Task<IActionResult> Register(int id,[FromQuery]bool register)
+        {
+             if(register)
+             {
+                StudentToClass st = new StudentToClass { Course = id, StudentId = getUserId() };
+                _context.StudentToClass.Add(st);
+                await _context.SaveChangesAsync();
+             }
+            return RedirectToAction("Index", "Timetable");
+        }
+
+        [Authorize(Roles = "Student")]
+        public IActionResult AllCourses()
+        {
+            var studtoclass = _context.StudentToClass.ToList().FindAll(x => x.StudentId.Equals(getUserId()));
+            var courseId = new List<int>();
+            foreach (StudentToClass chr in studtoclass)
+            {
+                courseId.Add(chr.Course);
+            }
+
+            var res = RelevantCourses(_context.Events.ToList());
+            foreach (Events ev in res.ToList())
+            {
+                if (courseId.Contains(ev.Id))
+                {
+                    res.Remove(ev);
+                }
+            }
+            return View(res);
+        }
+
+
         private bool TimeTableExists(int id)
         {
             return _context.Events.Any(e => e.Id == id);
         }
+
+        private List<Events> RelevantCourses(List<Events> lis)
+        {
+            DateTime now = DateTime.Now;
+            List<Events> res = new List<Events>();
+            foreach (Events ev in lis.ToList())
+            {
+                var d = ev.End;
+                if(DateTime.Compare(d,now)>=0)
+                {
+                    res.Add(ev);
+                }
+            }
+            return res;
+        }
+
 
         private int getUserId()
         {
